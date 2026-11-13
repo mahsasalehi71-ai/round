@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>آزمایشگاه کامل دوران | مستطیل، مثلث، نیم‌دایره و ربع‌دایره</title>
+<style>
+:root{
+  --bg:#f3f6fb;--surface:#fff;--ink:#172033;--muted:#66738b;--line:#dbe3ef;
+  --primary:#3156d8;--primary2:#2342ae;--soft:#edf2ff;
+  --green:#11966f;--green2:#0b7356;--greenSoft:#e8f8f2;
+  --gold:#a86d09;--goldSoft:#fff7e8;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 12px 34px rgba(15,23,42,.08);
+  --shadow2:0 3px 8px rgba(15,23,42,.08),0 22px 56px rgba(15,23,42,.12);
+  --r1:26px;--r2:18px;--ease:cubic-bezier(.22,.8,.24,1)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--ink);
+  font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.7;
+  background:
+    linear-gradient(rgba(49,86,216,.034) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(49,86,216,.034) 1px,transparent 1px),
+    radial-gradient(circle at 10% 8%,rgba(49,86,216,.10),transparent 30rem),
+    radial-gradient(circle at 93% 18%,rgba(17,150,111,.08),transparent 28rem),
+    var(--bg);
+  background-size:32px 32px,32px 32px,auto,auto,auto
+}
+button,select,input{font:inherit}
+button,select{min-height:46px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid rgba(49,86,216,.22);outline-offset:3px}
+.shell{width:min(1360px,calc(100% - 28px));margin:auto;padding:24px 0 48px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;color:#142657}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:white;font-size:22px;
+  background:linear-gradient(145deg,#4b6ee8,#2948bb);box-shadow:0 10px 20px rgba(49,86,216,.22),inset 0 1px rgba(255,255,255,.35)}
+.badge{padding:7px 12px;border:1px solid #dae3fb;background:rgba(255,255,255,.84);border-radius:999px;color:#405791;font-size:12px;font-weight:800}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:32px;color:#fff;margin-bottom:18px;box-shadow:var(--shadow2);
+  background:linear-gradient(135deg,#0f172a,#172554 52%,#24449a)}
+.hero:before{content:"";position:absolute;width:330px;height:330px;border:1px solid rgba(255,255,255,.11);border-radius:50%;left:-120px;top:-175px}
+.hero h1{margin:0 0 10px;font-size:clamp(27px,4vw,43px);line-height:1.25}
+.hero p{margin:0;color:#dbeafe;max-width:980px}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+.tab{border:1px solid #ced9e9;background:#fff;color:#38465f;border-radius:14px;padding:0 16px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #d7dfeb;transition:.18s var(--ease)}
+.tab:hover{transform:translateY(-2px)}
+.tab.active{color:#fff;background:linear-gradient(180deg,#4568e6,#3156d8);border-color:#2949be;box-shadow:0 5px 0 #203d9f,0 10px 20px rgba(49,86,216,.18)}
+.panel{display:none}.panel.active{display:block}
+.control-card,.shape-card,.experiment,.summary{
+  background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:var(--r1);box-shadow:var(--shadow)
+}
+.control-card{padding:18px;margin-bottom:18px}
+.control-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}
+.control-head h2,.shape-copy h2,.summary h2{margin:0;color:#172554;font-size:20px}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13px}
+.fields{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end}
+.field label{display:block;font-size:13px;font-weight:900;color:#41506b;margin-bottom:6px}
+select{width:100%;border:1px solid #cfd9e8;border-radius:14px;background:#fff;color:#1f2a44;padding:0 14px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid transparent;border-radius:14px;padding:0 16px;font-weight:900;cursor:pointer;transition:.18s var(--ease)}
+.btn-primary{color:#fff;background:linear-gradient(180deg,#4568e6,#3156d8);border-color:#2949be;box-shadow:0 7px 0 #203d9f,0 12px 18px rgba(49,86,216,.18)}
+.btn-primary:hover{transform:translateY(-2px)}.btn-primary:active{transform:translateY(4px);box-shadow:0 3px 0 #203d9f}
+.btn-secondary{background:#fff;color:#34415a;border-color:#ced8e7;box-shadow:0 5px 0 #d8dfeb}
+.btn-secondary:active{transform:translateY(3px);box-shadow:0 2px 0 #d8dfeb}
+.shape-card{display:grid;grid-template-columns:.85fr 1.15fr;gap:18px;align-items:center;padding:20px;margin-bottom:18px}
+.shape-copy p{margin:6px 0 0;color:var(--muted)}
+.note{margin-top:12px;padding:10px 12px;border-radius:13px;background:var(--soft);border-right:4px solid var(--primary);color:#31487f;font-size:13px}
+.preview{min-height:230px;border:1px solid #e3eaf3;border-radius:19px;background:
+  linear-gradient(rgba(49,86,216,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(49,86,216,.045) 1px,transparent 1px),#fbfdff;
+  background-size:24px 24px;display:grid;place-items:center;padding:12px}
+.preview svg{width:min(100%,460px);height:210px;overflow:visible}
+.experiments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.experiment{overflow:hidden}
+.exp-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 18px 12px}
+.exp-head h3{margin:0;font-size:18px;color:#172554}
+.axis-pill{padding:5px 9px;border-radius:999px;background:var(--greenSoft);border:1px solid #cdeee2;color:#0d7458;font-size:11px;font-weight:900;white-space:nowrap}
+.canvas-wrap{padding:0 12px}
+canvas{display:block;width:100%;height:auto;aspect-ratio:620/390;border-radius:17px;border:1px solid #e2e8f1;background:#fbfdff}
+.scrub{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 18px 0}
+.scrub span{font-size:11px;color:var(--muted);font-weight:800}
+input[type=range]{width:100%;accent-color:var(--primary);cursor:pointer}
+.actions{display:flex;gap:8px;flex-wrap:wrap;padding:13px 18px 16px}
+.actions .btn{min-height:41px;font-size:12px}
+.result{padding:16px 18px 18px;border-top:1px solid var(--line);background:linear-gradient(180deg,#fbfdff,#f7f9fd)}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:10px}
+.metric{border:1px solid #e0e7f0;border-radius:14px;background:#fff;padding:10px}
+.metric small{display:block;color:var(--muted);font-weight:800}
+.metric strong{display:block;margin-top:2px;color:#1b2c55;font-size:17px}
+.formula{direction:ltr;text-align:center;border:1px dashed #cfd9e8;background:white;border-radius:14px;padding:10px;font-family:Cambria,Georgia,serif;color:#233c80;font-size:17px}
+.volume{margin-top:10px;padding:11px 12px;border-radius:14px;background:var(--goldSoft);border:1px solid #f0ddb8;color:#704b0c}
+.volume strong{font-size:18px;color:#845707}
+.summary{grid-column:1/-1;padding:18px;margin-top:18px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.summary-item{background:#fbfdff;border:1px solid #dfe6ef;border-radius:15px;padding:13px;text-align:center}
+.summary-item b{display:block;direction:ltr;font-family:Cambria,Georgia,serif;color:#27428e;font-size:18px;margin-top:3px}
+.single-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.single-grid .experiment{min-width:0}
+.teach{margin-top:12px;padding:11px 13px;border-radius:14px;background:var(--greenSoft);border-right:4px solid var(--green);color:#205f4d;font-size:13px}
+.rect-2d{position:relative;width:260px;height:130px;border:3px solid var(--primary);border-radius:8px;background:linear-gradient(135deg,rgba(49,86,216,.13),rgba(17,150,111,.10));box-shadow:inset 0 0 0 1px rgba(255,255,255,.9);transition:width .35s var(--ease),height .35s var(--ease)}
+.dim{position:absolute;font-size:13px;font-weight:900;color:#34456a;background:#fff;border:1px solid #d9e2ef;border-radius:999px;padding:4px 9px;white-space:nowrap;box-shadow:0 4px 10px rgba(15,23,42,.06)}
+.dim-length{left:50%;transform:translateX(-50%);bottom:-38px}
+.dim-width{top:50%;right:-55px;transform:translateY(-50%) rotate(-90deg)}
+.footer{text-align:center;color:#758197;font-size:12px;margin-top:18px}
+@media(max-width:980px){.shape-card{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.fields .btnrow{grid-column:1/-1}.experiments,.single-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.shell{width:calc(100% - 16px);padding-top:12px}.hero{padding:23px 17px;border-radius:23px}.fields{grid-template-columns:1fr}.fields .btnrow{grid-column:auto}.btnrow .btn{flex:1}.shape-card,.control-card{padding:15px;border-radius:21px}.summary-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.badge{font-size:10px}.topbar{align-items:flex-start}.rect-2d{max-width:65vw}.dim-width{right:-51px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="logo">π</div><span>آزمایشگاه کامل دوران</span></div>
+    <div class="badge">هندسه فضایی · متوسطه اول</div>
+  </header>
+
+  <section class="hero">
+    <h1>از شکل دوبعدی تا جسم سه‌بعدی با دوران</h1>
+    <p>در این آزمایشگاه کامل می‌توانی دوران <strong>مستطیل</strong>، <strong>مثلث قائم‌الزاویه</strong>، <strong>نیم‌دایره</strong> و <strong>ربع‌دایره</strong> را بررسی کنی. جسم سه‌بعدی از همان لحظه‌ی شروع دوران، مرحله‌به‌مرحله تشکیل می‌شود و با اسلایدر می‌توان هر زاویه را دقیق مشاهده کرد.</p>
+  </section>
+
+  <nav class="tabs" aria-label="انتخاب آزمایش">
+    <button class="tab active" data-tab="rectangle">مستطیل</button>
+    <button class="tab" data-tab="triangle">مثلث قائم‌الزاویه</button>
+    <button class="tab" data-tab="semicircle">نیم‌دایره</button>
+    <button class="tab" data-tab="quarter">ربع‌دایره</button>
+  </nav>
+
+  <!-- RECTANGLE -->
+  <section class="panel active" id="rectanglePanel">
+    <div class="control-card">
+      <div class="control-head">
+        <div><h2>ابعاد مستطیل</h2><p class="sub">طول و عرض را تغییر بده؛ دوران حول هر ضلع یک استوانه می‌سازد.</p></div>
+      </div>
+      <div class="fields">
+        <div class="field"><label for="rectL">طول L</label><select id="rectL"></select></div>
+        <div class="field"><label for="rectW">عرض W</label><select id="rectW"></select></div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="playRectAll">▶ دوران هر دو</button>
+          <button class="btn btn-secondary" id="resetRectAll">↺ بازنشانی</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape-card">
+      <div class="shape-copy">
+        <h2>مستطیل اولیه</h2>
+        <p>همین یک مستطیل، با توجه به اینکه حول طول یا عرض بچرخد، دو استوانه با ابعاد متفاوت می‌سازد.</p>
+        <div class="note">ضلعِ محور دوران = <strong>ارتفاع استوانه</strong> و ضلع دیگر = <strong>شعاع استوانه</strong>.</div>
+      </div>
+      <div class="preview">
+        <div class="rect-2d" id="rect2d">
+          <span class="dim dim-length" id="rectLLabel">طول: 8 cm</span>
+          <span class="dim dim-width" id="rectWLabel">عرض: 4 cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="experiments">
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران حول طول</h3><span class="axis-pill">استوانه</span></div>
+        <div class="canvas-wrap"><canvas id="rectCanvasL" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="rectProgL" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="rectPlayL">▶ شروع دوران</button><button class="btn btn-secondary" id="rectResetL">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>ارتفاع</small><strong id="rectHL">8 cm</strong></div><div class="metric"><small>شعاع</small><strong id="rectRL">4 cm</strong></div></div>
+          <div class="formula" id="rectFormulaL">V = π × 4² × 8</div>
+          <div class="volume">حجم: <strong id="rectVolL">128π cm³</strong> <span id="rectVolLApprox"></span></div>
+        </div>
+      </article>
+
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران حول عرض</h3><span class="axis-pill">استوانه</span></div>
+        <div class="canvas-wrap"><canvas id="rectCanvasW" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="rectProgW" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="rectPlayW">▶ شروع دوران</button><button class="btn btn-secondary" id="rectResetW">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>ارتفاع</small><strong id="rectHW">4 cm</strong></div><div class="metric"><small>شعاع</small><strong id="rectRW">8 cm</strong></div></div>
+          <div class="formula" id="rectFormulaW">V = π × 8² × 4</div>
+          <div class="volume">حجم: <strong id="rectVolW">256π cm³</strong> <span id="rectVolWApprox"></span></div>
+        </div>
+      </article>
+
+      <section class="summary">
+        <h2>مقایسه‌ی دو حجم حاصل از مستطیل</h2>
+        <div class="summary-grid">
+          <div class="summary-item">حول طول<b id="sumRectL"></b></div>
+          <div class="summary-item">حول عرض<b id="sumRectW"></b></div>
+          <div class="summary-item">نکته<b id="sumRectInfo">شعاع هرچه بزرگ‌تر، حجم سریع‌تر بیشتر می‌شود.</b></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- TRIANGLE -->
+  <section class="panel" id="trianglePanel">
+    <div class="control-card">
+      <div class="control-head">
+        <div><h2>ابعاد مثلث قائم‌الزاویه</h2><p class="sub">دو ساق را تغییر بده؛ وتر و حجم‌ها خودکار محاسبه می‌شوند.</p></div>
+      </div>
+      <div class="fields">
+        <div class="field"><label for="legA">ساق a</label><select id="legA"></select></div>
+        <div class="field"><label for="legB">ساق b</label><select id="legB"></select></div>
+        <div class="btnrow">
+          <button class="btn btn-primary" id="playTriangleAll">▶ دوران هر سه</button>
+          <button class="btn btn-secondary" id="resetTriangleAll">↺ بازنشانی</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shape-card">
+      <div class="shape-copy">
+        <h2>مثلث اولیه</h2>
+        <p>با دوران حول هر ساق یک مخروط ساخته می‌شود. با دوران حول وتر، دو مخروطِ به‌هم‌چسبیده (دو مخروط مشترک‌القاعده) تشکیل می‌شود.</p>
+        <div class="note">در دوران حول یک ساق: آن ساق = ارتفاع مخروط و ساق دیگر = شعاع قاعده.</div>
+      </div>
+      <div class="preview">
+        <svg viewBox="0 0 440 220" aria-label="مثلث قائم‌الزاویه">
+          <defs><linearGradient id="triG" x1="0" x2="1"><stop offset="0" stop-color="#3156d8" stop-opacity=".18"/><stop offset="1" stop-color="#11966f" stop-opacity=".15"/></linearGradient></defs>
+          <path id="triPreview" d="M100 180 L340 180 L100 60 Z" fill="url(#triG)" stroke="#3156d8" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M100 158 L122 158 L122 180" fill="none" stroke="#172554" stroke-width="3"/>
+          <text id="triALabel" x="215" y="207" text-anchor="middle" font-family="Tahoma" font-size="14" fill="#34456a">a = 6 cm</text>
+          <text id="triBLabel" x="67" y="125" text-anchor="middle" font-family="Tahoma" font-size="14" fill="#34456a" transform="rotate(-90 67 125)">b = 4 cm</text>
+          <text id="triCLabel" x="230" y="104" text-anchor="middle" font-family="Tahoma" font-size="14" fill="#34456a">c</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="experiments">
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران حول ساق a</h3><span class="axis-pill">مخروط</span></div>
+        <div class="canvas-wrap"><canvas id="triCanvasA" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="triProgA" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="triPlayA">▶ شروع دوران</button><button class="btn btn-secondary" id="triResetA">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>ارتفاع</small><strong id="triHA">6 cm</strong></div><div class="metric"><small>شعاع</small><strong id="triRA">4 cm</strong></div></div>
+          <div class="formula" id="triFormulaA">V = ⅓π × 4² × 6</div>
+          <div class="volume">حجم: <strong id="triVolA">32π cm³</strong> <span id="triVolAApprox"></span></div>
+        </div>
+      </article>
+
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران حول ساق b</h3><span class="axis-pill">مخروط</span></div>
+        <div class="canvas-wrap"><canvas id="triCanvasB" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="triProgB" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="triPlayB">▶ شروع دوران</button><button class="btn btn-secondary" id="triResetB">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>ارتفاع</small><strong id="triHB">4 cm</strong></div><div class="metric"><small>شعاع</small><strong id="triRB">6 cm</strong></div></div>
+          <div class="formula" id="triFormulaB">V = ⅓π × 6² × 4</div>
+          <div class="volume">حجم: <strong id="triVolB">48π cm³</strong> <span id="triVolBApprox"></span></div>
+        </div>
+      </article>
+
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران حول وتر c</h3><span class="axis-pill">دو مخروط مشترک‌القاعده</span></div>
+        <div class="canvas-wrap"><canvas id="triCanvasC" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="triProgC" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="triPlayC">▶ شروع دوران</button><button class="btn btn-secondary" id="triResetC">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>طول محور (وتر)</small><strong id="triHC"></strong></div><div class="metric"><small>شعاع مشترک</small><strong id="triRC"></strong></div></div>
+          <div class="formula" id="triFormulaC"></div>
+          <div class="volume">حجم کل: <strong id="triVolC"></strong> <span id="triVolCApprox"></span></div>
+        </div>
+      </article>
+
+      <section class="summary">
+        <h2>مقایسه‌ی حجم‌های حاصل از دوران مثلث</h2>
+        <div class="summary-grid">
+          <div class="summary-item">حول ساق a<b id="sumTriA"></b></div>
+          <div class="summary-item">حول ساق b<b id="sumTriB"></b></div>
+          <div class="summary-item">حول وتر c<b id="sumTriC"></b></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- SEMICIRCLE -->
+  <section class="panel" id="semicirclePanel">
+    <div class="control-card">
+      <div class="control-head"><div><h2>نیم‌دایره حول محور شعاعی</h2><p class="sub">محور روی خط قطر قرار دارد؛ دوران کامل ناحیه‌ی نیم‌دایره، یک کره می‌سازد.</p></div></div>
+      <div class="fields" style="grid-template-columns:1fr auto">
+        <div class="field"><label for="semiR">شعاع r</label><select id="semiR"></select></div>
+        <div class="btnrow"><button class="btn btn-primary" id="semiPlay">▶ شروع دوران</button><button class="btn btn-secondary" id="semiReset">↺ بازنشانی</button></div>
+      </div>
+    </div>
+    <div class="shape-card">
+      <div class="shape-copy">
+        <h2>نیم‌دایره اولیه</h2>
+        <p>وقتی نیم‌دایره حول محور شعاعیِ هم‌راستا با قطر بچرخد، همه‌ی نقاط سطح کروی را جاروب می‌کنند و یک کره تشکیل می‌شود.</p>
+        <div class="note">شعاع کره همان شعاع نیم‌دایره است.</div>
+      </div>
+      <div class="preview">
+        <svg viewBox="0 0 440 220" aria-label="نیم‌دایره">
+          <path id="semiPreview" d="M100 170 A120 120 0 0 1 340 170 L100 170 Z" fill="rgba(49,86,216,.14)" stroke="#3156d8" stroke-width="4"/>
+          <line x1="100" y1="170" x2="340" y2="170" stroke="#172554" stroke-width="3"/>
+          <circle cx="220" cy="170" r="5" fill="#11966f"/>
+          <text id="semiLabel" x="220" y="202" text-anchor="middle" font-family="Tahoma" font-size="14" fill="#34456a">r = 5 cm</text>
+        </svg>
+      </div>
+    </div>
+    <div class="single-grid">
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران نیم‌دایره → کره</h3><span class="axis-pill">کره</span></div>
+        <div class="canvas-wrap"><canvas id="semiCanvas" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="semiProg" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="semiPlay2">▶ شروع دوران</button><button class="btn btn-secondary" id="semiReset2">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>شعاع کره</small><strong id="sphereR">5 cm</strong></div><div class="metric"><small>جسم حاصل</small><strong>کره</strong></div></div>
+          <div class="formula" id="sphereFormula">V = ⁴⁄₃π × 5³</div>
+          <div class="volume">حجم: <strong id="sphereVol"></strong> <span id="sphereApprox"></span></div>
+          <div class="teach">در این دوران هیچ قاعده‌ی تختی باقی نمی‌ماند؛ سطح منحنی نیم‌دایره، سطح کامل کره را می‌سازد.</div>
+        </div>
+      </article>
+      <section class="summary" style="margin-top:0">
+        <h2>نکته‌ی آموزشی</h2>
+        <div class="teach">اگر شعاع را ۲ برابر کنیم، حجم کره ۸ برابر می‌شود؛ چون شعاع در فرمول حجم به توان ۳ می‌رسد.</div>
+      </section>
+    </div>
+  </section>
+
+  <!-- QUARTER -->
+  <section class="panel" id="quarterPanel">
+    <div class="control-card">
+      <div class="control-head"><div><h2>ربع‌دایره حول شعاع</h2><p class="sub">ربع‌دایره حول یکی از شعاع‌های مرزی می‌چرخد و یک نیم‌کره می‌سازد.</p></div></div>
+      <div class="fields" style="grid-template-columns:1fr auto">
+        <div class="field"><label for="quarterR">شعاع r</label><select id="quarterR"></select></div>
+        <div class="btnrow"><button class="btn btn-primary" id="quarterPlay">▶ شروع دوران</button><button class="btn btn-secondary" id="quarterReset">↺ بازنشانی</button></div>
+      </div>
+    </div>
+    <div class="shape-card">
+      <div class="shape-copy">
+        <h2>ربع‌دایره اولیه</h2>
+        <p>با دوران ربع‌دایره حول یکی از شعاع‌ها، یک نیم‌کره شکل می‌گیرد و شعاع نیم‌کره برابر شعاع ربع‌دایره است.</p>
+        <div class="note">قاعده‌ی دایره‌ای نیم‌کره در حین تشکیل، به صورت سبز شیشه‌ای نمایش داده می‌شود.</div>
+      </div>
+      <div class="preview">
+        <svg viewBox="0 0 440 220" aria-label="ربع‌دایره">
+          <path d="M120 180 L120 60 A120 120 0 0 1 240 180 Z" fill="rgba(17,150,111,.13)" stroke="#3156d8" stroke-width="4"/>
+          <line x1="120" y1="180" x2="240" y2="180" stroke="#172554" stroke-width="3"/>
+          <line x1="120" y1="180" x2="120" y2="60" stroke="#172554" stroke-width="3"/>
+          <text id="quarterLabel" x="180" y="207" text-anchor="middle" font-family="Tahoma" font-size="14" fill="#34456a">r = 5 cm</text>
+        </svg>
+      </div>
+    </div>
+    <div class="single-grid">
+      <article class="experiment">
+        <div class="exp-head"><h3>دوران ربع‌دایره → نیم‌کره</h3><span class="axis-pill">نیم‌کره</span></div>
+        <div class="canvas-wrap"><canvas id="quarterCanvas" width="620" height="390"></canvas></div>
+        <div class="scrub"><span>۰°</span><input id="quarterProg" type="range" min="0" max="1000" value="0"><span>۳۶۰°</span></div>
+        <div class="actions"><button class="btn btn-primary" id="quarterPlay2">▶ شروع دوران</button><button class="btn btn-secondary" id="quarterReset2">↺ از ابتدا</button></div>
+        <div class="result">
+          <div class="metrics"><div class="metric"><small>شعاع نیم‌کره</small><strong id="hemiR">5 cm</strong></div><div class="metric"><small>جسم حاصل</small><strong>نیم‌کره</strong></div></div>
+          <div class="formula" id="hemiFormula">V = ²⁄₃π × 5³</div>
+          <div class="volume">حجم: <strong id="hemiVol"></strong> <span id="hemiApprox"></span></div>
+        </div>
+      </article>
+      <section class="summary" style="margin-top:0">
+        <h2>رابطه با کره</h2>
+        <div class="teach">حجم نیم‌کره دقیقاً نصف حجم کره‌ای با همان شعاع است.</div>
+      </section>
+    </div>
+  </section>
+
+  <div class="footer">در همه‌ی انیمیشن‌ها، شکل مولد بدون پرسپکتیو نمایش داده می‌شود و جسم سه‌بعدی از همان شروع دوران به‌تدریج شکل می‌گیرد.</div>
+</main>
+
+<script>
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id);
+const state={
+  rectL:8,rectW:4,rectPL:0,rectPW:0,
+  a:6,b:4,triA:0,triB:0,triC:0,
+  semiR:5,semi:0,quarterR:5,quarter:0,
+  raf:{}
+};
+const theme={primary:"#3156d8",axis:"#20376f",green:"#11966f",greenDark:"#0b7356",grid:"#e8edf5",ink:"#1d2941"};
+
+function fill(sel,min,max,val,unit=" سانتی‌متر"){
+  for(let i=min;i<=max;i++){const o=document.createElement("option");o.value=i;o.textContent=i+unit;o.selected=i===val;sel.appendChild(o)}
+}
+fill($("rectL"),2,12,state.rectL); fill($("rectW"),2,12,state.rectW);
+fill($("legA"),2,10,state.a); fill($("legB"),2,10,state.b);
+fill($("semiR"),2,9,state.semiR); fill($("quarterR"),2,9,state.quarterR);
+
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  $(btn.dataset.tab+"Panel").classList.add("active");
+  setTimeout(renderAll,0);
+}));
+
+function grid(ctx,w,h){
+  ctx.save();ctx.strokeStyle=theme.grid;ctx.lineWidth=1;
+  for(let x=24;x<w;x+=32){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+  for(let y=24;y<h;y+=32){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+  ctx.restore()
+}
+function rr(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function label(ctx,text,x,y,bg="#fff",fg=theme.ink){
+  ctx.save();ctx.font="700 13px Tahoma";const W=ctx.measureText(text).width+18,H=28;rr(ctx,x-W/2,y-H/2,W,H,10);ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle="rgba(15,23,42,.10)";ctx.stroke();ctx.fillStyle=fg;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,x,y+1);ctx.restore()
+}
+function glassEllipse(ctx,cx,cy,rx,ry,alpha=1){
+  ctx.save();ctx.globalAlpha=alpha;
+  const g=ctx.createRadialGradient(cx-rx*.22,cy-ry*.28,3,cx,cy,rx);
+  g.addColorStop(0,"rgba(245,255,251,.92)");
+  g.addColorStop(.28,"rgba(196,255,232,.72)");
+  g.addColorStop(.64,"rgba(91,225,181,.42)");
+  g.addColorStop(1,"rgba(15,145,105,.22)");
+  ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="rgba(13,126,92,.88)";ctx.lineWidth=2;ctx.stroke();ctx.restore()
+}
+function floorShadow(ctx,cx,cy,rx,alpha){
+  ctx.save();const g=ctx.createRadialGradient(cx,cy,5,cx,cy,rx);g.addColorStop(0,`rgba(15,23,42,${.12*alpha})`);g.addColorStop(1,"rgba(15,23,42,0)");ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(cx,cy,rx,Math.max(10,rx*.14),0,0,Math.PI*2);ctx.fill();ctx.restore()
+}
+function stop(key){if(state.raf[key]){cancelAnimationFrame(state.raf[key]);state.raf[key]=null}}
+function setP(key,p,input,render){state[key]=Math.max(0,Math.min(1,p));if(input)input.value=Math.round(state[key]*1000);render()}
+function animate(key,input,render){
+  stop(key);let startP=state[key]>=.999?0:state[key],t0=null,d=2400;
+  function f(t){if(t0===null)t0=t;let q=Math.min(1,(t-t0)/d),e=1-Math.pow(1-q,3);setP(key,startP+(1-startP)*e,input,render);if(q<1)state.raf[key]=requestAnimationFrame(f);else state.raf[key]=null}
+  state.raf[key]=requestAnimationFrame(f)
+}
+function fmt(n){return Number(n.toFixed(2))}
+function fmtCoef(n){return Number(n.toFixed(3)).toString()}
+
+/* RECTANGLE */
+function drawCylinder(ctx,cx,cy,radiusPx,heightPx,formation){
+  if(formation<=0)return;
+  const topY=cy-heightPx/2,bottomY=cy+heightPx/2,ellipseRY=Math.max(15,radiusPx*.24),sweep=Math.max(.001,Math.min(1,formation))*Math.PI*2;
+  const solidOpacity=Math.pow(formation,1.55),bandCount=Math.max(1,Math.floor(formation*42));
+  floorShadow(ctx,cx,bottomY+20,radiusPx*1.1,.16+.66*solidOpacity);
+  ctx.save();
+  for(let i=0;i<bandCount;i++){
+    const t=bandCount===1?0:i/(bandCount-1),a=sweep*t,x=cx+radiusPx*Math.cos(a),front=(Math.sin(a-Math.PI/2)+1)/2,alpha=(.04+.18*t)*(.55+.45*front);
+    ctx.strokeStyle=`rgba(32,84,186,${alpha})`;ctx.lineWidth=1.1+1.2*front;
+    ctx.beginPath();ctx.moveTo(x,topY+1);ctx.lineTo(x,bottomY-1);ctx.stroke()
+  }
+  ctx.restore();
+  if(solidOpacity>.02){
+    ctx.save();ctx.globalAlpha=.16+.72*solidOpacity;
+    const bodyGrad=ctx.createLinearGradient(cx-radiusPx,0,cx+radiusPx,0);
+    bodyGrad.addColorStop(0,"rgba(26,61,160,.18)");bodyGrad.addColorStop(.18,"rgba(66,104,222,.10)");bodyGrad.addColorStop(.42,"rgba(255,255,255,.45)");
+    bodyGrad.addColorStop(.60,"rgba(255,255,255,.18)");bodyGrad.addColorStop(.84,"rgba(15,143,134,.15)");bodyGrad.addColorStop(1,"rgba(13,101,116,.22)");
+    ctx.fillStyle=bodyGrad;ctx.beginPath();
+    ctx.moveTo(cx-radiusPx,topY);ctx.lineTo(cx-radiusPx,bottomY);
+    ctx.bezierCurveTo(cx-radiusPx,bottomY+ellipseRY,cx+radiusPx,bottomY+ellipseRY,cx+radiusPx,bottomY);
+    ctx.lineTo(cx+radiusPx,topY);
+    ctx.bezierCurveTo(cx+radiusPx,topY-ellipseRY,cx-radiusPx,topY-ellipseRY,cx-radiusPx,topY);
+    ctx.closePath();ctx.fill();
+    const topGrad=ctx.createRadialGradient(cx-radiusPx*.28,topY-ellipseRY*.26,4,cx,topY,radiusPx);
+    topGrad.addColorStop(0,"rgba(255,255,255,.94)");topGrad.addColorStop(.24,"rgba(212,255,245,.88)");
+    topGrad.addColorStop(.58,"rgba(109,225,194,.52)");topGrad.addColorStop(1,"rgba(20,160,126,.34)");
+    ctx.fillStyle=topGrad;ctx.beginPath();ctx.ellipse(cx,topY,radiusPx,ellipseRY,0,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.globalAlpha=.28+.46*solidOpacity;ctx.fillStyle="rgba(88,222,181,.34)";
+    ctx.beginPath();ctx.ellipse(cx,topY,radiusPx*.96,ellipseRY*.92,0,0,Math.PI*2);ctx.fill();ctx.restore();
+    const sheen=ctx.createLinearGradient(cx-radiusPx*.45,0,cx+radiusPx*.2,0);
+    sheen.addColorStop(0,"rgba(255,255,255,0)");sheen.addColorStop(.5,"rgba(255,255,255,.34)");sheen.addColorStop(1,"rgba(255,255,255,0)");
+    ctx.fillStyle=sheen;ctx.fillRect(cx-radiusPx*.48,topY+8,radiusPx*.7,Math.max(0,heightPx-16));
+    ctx.restore()
+  }
+  if(solidOpacity>.02){
+    ctx.save();ctx.globalAlpha=.14+.36*solidOpacity;
+    const bottomGrad=ctx.createRadialGradient(cx-radiusPx*.22,bottomY-ellipseRY*.25,5,cx,bottomY,radiusPx);
+    bottomGrad.addColorStop(0,"rgba(240,255,251,.72)");bottomGrad.addColorStop(.45,"rgba(140,235,205,.30)");bottomGrad.addColorStop(1,"rgba(26,150,120,.14)");
+    ctx.fillStyle=bottomGrad;ctx.beginPath();ctx.ellipse(cx,bottomY,radiusPx*.96,ellipseRY*.90,0,0,Math.PI*2);ctx.fill();ctx.restore()
+  }
+  ctx.save();ctx.strokeStyle=`rgba(20,150,118,${0.22+0.58*formation})`;ctx.lineWidth=2.2;
+  ctx.beginPath();ctx.ellipse(cx,topY,radiusPx,ellipseRY,0,0,sweep);ctx.stroke();
+  ctx.beginPath();ctx.ellipse(cx,bottomY,radiusPx,ellipseRY,0,0,Math.min(sweep,Math.PI));ctx.stroke();
+  ctx.restore();
+  if(formation>.86){
+    const f=Math.min(1,(formation-.86)/.14);
+    ctx.save();ctx.globalAlpha=f;ctx.strokeStyle="rgba(29,118,100,.92)";ctx.lineWidth=2.3;
+    ctx.beginPath();ctx.moveTo(cx-radiusPx,topY);ctx.lineTo(cx-radiusPx,bottomY);ctx.moveTo(cx+radiusPx,topY);ctx.lineTo(cx+radiusPx,bottomY);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(cx,topY,radiusPx,ellipseRY,0,0,Math.PI*2);ctx.stroke();
+    ctx.save();ctx.globalAlpha=.42*f;ctx.setLineDash([6,5]);ctx.beginPath();ctx.ellipse(cx,bottomY,radiusPx,ellipseRY,0,Math.PI,Math.PI*2);ctx.stroke();ctx.restore();
+    ctx.save();ctx.globalAlpha=.88*f;ctx.beginPath();ctx.ellipse(cx,bottomY,radiusPx,ellipseRY,0,0,Math.PI);ctx.stroke();ctx.restore();
+    ctx.restore()
+  }
+}
+function renderRectCanvas(canvas,p,axisVal,radiusVal,axisName){
+  const ctx=canvas.getContext("2d"),W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);ctx.fillStyle="#fbfdff";ctx.fillRect(0,0,W,H);grid(ctx,W,H);
+  const maxDim=Math.max(axisVal,radiusVal,6),scale=Math.min(19,146/maxDim),heightPx=Math.max(112,axisVal*scale),radiusPx=Math.max(68,radiusVal*scale),cx=W*.5,cy=H*.51;
+  drawCylinder(ctx,cx,cy,radiusPx,heightPx,p);
+  const topY=cy-heightPx/2,bottomY=cy+heightPx/2,freeX=cx+radiusPx*Math.cos(p*Math.PI*2),left=Math.min(cx,freeX),w=Math.abs(freeX-cx);
+  const rectGrad=ctx.createLinearGradient(left,0,left+Math.max(1,w),0);rectGrad.addColorStop(0,"rgba(49,86,216,.30)");rectGrad.addColorStop(1,"rgba(15,143,134,.18)");
+  ctx.save();ctx.fillStyle=rectGrad;ctx.strokeStyle=theme.primary;ctx.lineWidth=2.8;ctx.beginPath();ctx.rect(left,topY,Math.max(.7,w),heightPx);ctx.fill();ctx.stroke();ctx.restore();
+  ctx.save();ctx.strokeStyle=theme.axis;ctx.lineWidth=5.5;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(cx,topY-20);ctx.lineTo(cx,bottomY+20);ctx.stroke();ctx.restore();
+  ctx.save();ctx.strokeStyle=theme.green;ctx.lineWidth=3.2;ctx.beginPath();ctx.moveTo(freeX,topY);ctx.lineTo(freeX,bottomY);ctx.stroke();ctx.fillStyle=theme.green;ctx.beginPath();ctx.arc(freeX,topY,5.2,0,Math.PI*2);ctx.arc(freeX,bottomY,5.2,0,Math.PI*2);ctx.fill();ctx.restore();
+  label(ctx,`دوران: ${Math.round(p*360)}°`,82,31);label(ctx,`محور = ${axisName}`,W-86,31,"#edf2ff","#2d4689");
+  label(ctx,p>=.995?"استوانه‌ی کامل":p<.03?"مستطیل اولیه":"تشکیل تدریجی استوانه",cx,H-28,p>.995?"#e8f8f2":"#fff",p>.995?"#0b7356":"#43506a")
+}
+function updateRect(){
+  const L=state.rectL,W=state.rectW,k1=W*W*L,k2=L*L*W;
+  $("rectHL").textContent=L+" cm";$("rectRL").textContent=W+" cm";$("rectHW").textContent=W+" cm";$("rectRW").textContent=L+" cm";
+  $("rectFormulaL").textContent=`V = π × ${W}² × ${L}`;$("rectFormulaW").textContent=`V = π × ${L}² × ${W}`;
+  $("rectVolL").textContent=`${k1}π cm³`;$("rectVolLApprox").textContent=`≈ ${fmt(k1*Math.PI)} cm³`;
+  $("rectVolW").textContent=`${k2}π cm³`;$("rectVolWApprox").textContent=`≈ ${fmt(k2*Math.PI)} cm³`;
+  $("sumRectL").textContent=`${k1}π cm³`;$("sumRectW").textContent=`${k2}π cm³`;
+  $("sumRectInfo").textContent = k1===k2 ? "اگر طول و عرض برابر باشند، دو حجم یکسان می‌شوند." : (k1>k2 ? "در این انتخاب، دوران حول طول حجم بیشتری ساخته است." : "در این انتخاب، دوران حول عرض حجم بیشتری ساخته است.");
+  const maxDim=Math.max(L,W),displayW=120+(L/maxDim)*170,displayH=70+(W/maxDim)*85;
+  $("rect2d").style.width=Math.min(300,displayW)+"px";$("rect2d").style.height=Math.min(155,displayH)+"px";
+  $("rectLLabel").textContent=`طول: ${L} cm`;$("rectWLabel").textContent=`عرض: ${W} cm`;
+  renderRect()
+}
+function renderRect(){renderRectCanvas($("rectCanvasL"),state.rectPL,state.rectL,state.rectW,"طول");renderRectCanvas($("rectCanvasW"),state.rectPW,state.rectW,state.rectL,"عرض")}
+
+/* TRIANGLE */
+function drawCone(ctx,cx,cy,hPx,rPx,p){
+  const topY=cy-hPx/2,bottomY=cy+hPx/2,ry=Math.max(12,rPx*.23),sweep=p*Math.PI*2;
+  floorShadow(ctx,cx,bottomY+20,rPx*1.1,.2+.7*p);
+  const n=Math.max(1,Math.floor(44*p));
+  for(let i=0;i<n;i++){
+    const a=sweep*(n===1?0:i/(n-1)),x=cx+rPx*Math.cos(a);
+    ctx.save();ctx.strokeStyle=`rgba(49,86,216,${.035+.13*(i/Math.max(1,n-1))})`;ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(x,bottomY);ctx.stroke();ctx.restore()
+  }
+  const body=Math.pow(p,1.55);
+  if(body>.02){
+    ctx.save();ctx.globalAlpha=.1+.62*body;
+    const g=ctx.createLinearGradient(cx-rPx,0,cx+rPx,0);g.addColorStop(0,"rgba(49,86,216,.16)");g.addColorStop(.42,"rgba(255,255,255,.42)");g.addColorStop(1,"rgba(17,150,111,.18)");
+    ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(cx-rPx,bottomY);ctx.lineTo(cx+rPx,bottomY);ctx.closePath();ctx.fill();ctx.restore()
+  }
+  if(p>.015)glassEllipse(ctx,cx,bottomY,rPx,ry,.18+.72*p);
+  ctx.save();ctx.strokeStyle=`rgba(17,150,111,${.25+.65*p})`;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx,bottomY,rPx,ry,0,0,Math.max(.001,sweep));ctx.stroke();ctx.restore();
+  if(p>.86){let f=(p-.86)/.14;ctx.save();ctx.globalAlpha=f;ctx.strokeStyle="#24408a";ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(cx-rPx,bottomY);ctx.moveTo(cx,topY);ctx.lineTo(cx+rPx,bottomY);ctx.stroke();ctx.restore()}
+  const freeX=cx+rPx*Math.cos(p*Math.PI*2);
+  ctx.save();ctx.fillStyle="rgba(49,86,216,.20)";ctx.strokeStyle=theme.primary;ctx.lineWidth=2.7;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(cx,bottomY);ctx.lineTo(freeX,bottomY);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+  ctx.save();ctx.strokeStyle=theme.axis;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(cx,topY-18);ctx.lineTo(cx,bottomY+18);ctx.stroke();ctx.restore();
+}
+function drawDoubleCone(ctx,cx,cy,topH,bottomH,rPx,p){
+  const baseY=cy+(topH-bottomH)/2,topY=baseY-topH,bottomY=baseY+bottomH,ry=Math.max(12,rPx*.23),sweep=p*Math.PI*2;
+  floorShadow(ctx,cx,bottomY+18,rPx*1.08,.15+.65*p);
+  const n=Math.max(1,Math.floor(42*p));
+  for(let i=0;i<n;i++){
+    const a=sweep*(n===1?0:i/(n-1)),x=cx+rPx*Math.cos(a);
+    ctx.save();ctx.strokeStyle=`rgba(49,86,216,${.035+.12*i/Math.max(1,n-1)})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(x,baseY);ctx.lineTo(cx,bottomY);ctx.stroke();ctx.restore()
+  }
+  const body=Math.pow(p,1.55);
+  if(body>.02){ctx.save();ctx.globalAlpha=.08+.55*body;ctx.fillStyle="rgba(49,86,216,.17)";ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(cx-rPx,baseY);ctx.lineTo(cx,bottomY);ctx.lineTo(cx+rPx,baseY);ctx.closePath();ctx.fill();ctx.restore()}
+  if(p>.015)glassEllipse(ctx,cx,baseY,rPx,ry,.18+.72*p);
+  ctx.save();ctx.strokeStyle=theme.axis;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(cx,topY-15);ctx.lineTo(cx,bottomY+15);ctx.stroke();ctx.restore();
+  const freeX=cx+rPx*Math.cos(p*Math.PI*2);
+  ctx.save();ctx.fillStyle="rgba(49,86,216,.20)";ctx.strokeStyle=theme.primary;ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(cx,topY);ctx.lineTo(freeX,baseY);ctx.lineTo(cx,bottomY);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore()
+}
+function renderTriCanvas(canvas,p,mode){
+  const ctx=canvas.getContext("2d"),W=canvas.width,H=canvas.height;ctx.clearRect(0,0,W,H);ctx.fillStyle="#fbfdff";ctx.fillRect(0,0,W,H);grid(ctx,W,H);
+  const a=state.a,b=state.b,c=Math.hypot(a,b),max=Math.max(a,b,c),sc=Math.min(22,150/max),cx=W*.5,cy=H*.51;
+  if(mode==="A")drawCone(ctx,cx,cy,a*sc,b*sc,p);
+  else if(mode==="B")drawCone(ctx,cx,cy,b*sc,a*sc,p);
+  else{const r=a*b/c,h1=a*a/c,h2=b*b/c,sc2=Math.min(22,150/Math.max(c,r));drawDoubleCone(ctx,cx,cy,h1*sc2,h2*sc2,r*sc2,p)}
+  label(ctx,`دوران: ${Math.round(p*360)}°`,82,31);label(ctx,mode==="A"?"محور = ساق a":mode==="B"?"محور = ساق b":"محور = وتر c",W-88,31,"#edf2ff","#2d4689");
+  label(ctx,p<.02?"شکل اولیه":p>.995?(mode==="C"?"دو مخروط کامل":"مخروط کامل"):"تشکیل تدریجی جسم",cx,H-28,p>.995?"#e8f8f2":"#fff",p>.995?"#0b7356":"#43506a")
+}
+function updateTri(){
+  const a=state.a,b=state.b,c=Math.hypot(a,b);
+  $("triALabel").textContent=`a = ${a} cm`;$("triBLabel").textContent=`b = ${b} cm`;$("triCLabel").textContent=`c ≈ ${fmt(c)} cm`;
+  $("triHA").textContent=a+" cm";$("triRA").textContent=b+" cm";$("triHB").textContent=b+" cm";$("triRB").textContent=a+" cm";
+  const kA=a*b*b/3,kB=b*a*a/3,r=a*b/c,kC=r*r*c/3;
+  $("triFormulaA").textContent=`V = ⅓π × ${b}² × ${a}`;$("triFormulaB").textContent=`V = ⅓π × ${a}² × ${b}`;
+  $("triVolA").textContent=`${fmtCoef(kA)}π cm³`;$("triVolAApprox").textContent=`≈ ${fmt(kA*Math.PI)} cm³`;
+  $("triVolB").textContent=`${fmtCoef(kB)}π cm³`;$("triVolBApprox").textContent=`≈ ${fmt(kB*Math.PI)} cm³`;
+  $("triHC").textContent=`${fmt(c)} cm`;$("triRC").textContent=`${fmt(r)} cm`; $("triFormulaC").textContent=`V = ⅓π × (${fmt(r)})² × ${fmt(c)}`;
+  $("triVolC").textContent=`${fmtCoef(kC)}π cm³`;$("triVolCApprox").textContent=`≈ ${fmt(kC*Math.PI)} cm³`;
+  $("sumTriA").textContent=`${fmtCoef(kA)}π cm³`;$("sumTriB").textContent=`${fmtCoef(kB)}π cm³`;$("sumTriC").textContent=`${fmtCoef(kC)}π cm³`;
+  renderTri()
+}
+function renderTri(){renderTriCanvas($("triCanvasA"),state.triA,"A");renderTriCanvas($("triCanvasB"),state.triB,"B");renderTriCanvas($("triCanvasC"),state.triC,"C")}
+
+/* SEMICIRCLE & QUARTER */
+function drawSphere(ctx,cx,cy,r,p,hemi=false){
+  const sweep=p*Math.PI*2,body=Math.pow(p,1.5);
+  floorShadow(ctx,cx,cy+r+24,r*1.05,.15+.6*p);
+  const n=Math.max(1,Math.floor(40*p));
+  ctx.save();
+  for(let i=0;i<n;i++){
+    const t=n===1?0:i/(n-1),a=sweep*t,xScale=Math.abs(Math.cos(a));
+    ctx.strokeStyle=`rgba(49,86,216,${.035+.09*t})`;ctx.lineWidth=1;ctx.beginPath();
+    if(hemi) ctx.ellipse(cx,cy,r*xScale,r,0,-Math.PI/2,Math.PI/2);
+    else ctx.ellipse(cx,cy,r*xScale,r,0,0,Math.PI*2);
+    ctx.stroke()
+  }
+  ctx.restore();
+  if(body>.02){
+    ctx.save();ctx.globalAlpha=.08+.55*body;
+    const g=ctx.createRadialGradient(cx-r*.28,cy-r*.32,6,cx,cy,r);
+    g.addColorStop(0,"rgba(255,255,255,.94)");g.addColorStop(.35,"rgba(211,224,255,.62)");g.addColorStop(.72,"rgba(103,139,230,.25)");g.addColorStop(1,"rgba(17,150,111,.15)");
+    ctx.fillStyle=g;ctx.beginPath();
+    if(hemi){ctx.moveTo(cx,cy-r);ctx.arc(cx,cy,r,-Math.PI/2,Math.PI/2,false);ctx.lineTo(cx,cy-r);ctx.closePath()}
+    else ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fill();ctx.restore()
+  }
+  if(hemi && p>.015){glassEllipse(ctx,cx,cy,Math.max(14,r*.18),r,.18+.68*p)}
+  if(p>.86){
+    ctx.save();ctx.globalAlpha=(p-.86)/.14;ctx.strokeStyle="#24408a";ctx.lineWidth=2.2;ctx.beginPath();
+    if(hemi){ctx.arc(cx,cy,r,-Math.PI/2,Math.PI/2);ctx.stroke()}
+    else{ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.globalAlpha*=.42;ctx.beginPath();ctx.ellipse(cx,cy,r,r*.26,0,0,Math.PI*2);ctx.stroke()}
+    ctx.restore()
+  }
+}
+function drawSemiSource(ctx,cx,cy,r,p){
+  const comp=Math.abs(Math.cos(p*Math.PI*2));
+  ctx.save();ctx.strokeStyle=theme.primary;ctx.fillStyle="rgba(49,86,216,.18)";ctx.lineWidth=2.7;
+  ctx.beginPath();ctx.ellipse(cx,cy,r,r*comp,0,Math.PI,Math.PI*2);ctx.lineTo(cx-r,cy);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.strokeStyle=theme.axis;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(cx-r-18,cy);ctx.lineTo(cx+r+18,cy);ctx.stroke();ctx.restore()
+}
+function renderSemi(){
+  const c=$("semiCanvas"),ctx=c.getContext("2d"),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);ctx.fillStyle="#fbfdff";ctx.fillRect(0,0,W,H);grid(ctx,W,H);
+  const r=Math.min(145,state.semiR*24),cx=W*.5,cy=H*.5;
+  drawSphere(ctx,cx,cy,r,state.semi,false);drawSemiSource(ctx,cx,cy,r,state.semi);
+  label(ctx,`دوران: ${Math.round(state.semi*360)}°`,82,31);label(ctx,"محور شعاعی",W-85,31,"#edf2ff","#2d4689");
+  label(ctx,state.semi>.995?"کره‌ی کامل":state.semi<.02?"نیم‌دایره اولیه":"تشکیل تدریجی کره",cx,H-27,state.semi>.995?"#e8f8f2":"#fff",state.semi>.995?"#0b7356":"#43506a")
+}
+function drawQuarterSource(ctx,cx,cy,r,p){
+  const comp=Math.abs(Math.cos(p*Math.PI*2));
+  ctx.save();ctx.strokeStyle=theme.primary;ctx.fillStyle="rgba(17,150,111,.14)";ctx.lineWidth=2.7;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r,cy);ctx.ellipse(cx,cy,r,r*comp,0,0,-Math.PI/2,true);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.strokeStyle=theme.axis;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(cx-18,cy);ctx.lineTo(cx+r+18,cy);ctx.stroke();ctx.restore()
+}
+function renderQuarter(){
+  const c=$("quarterCanvas"),ctx=c.getContext("2d"),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);ctx.fillStyle="#fbfdff";ctx.fillRect(0,0,W,H);grid(ctx,W,H);
+  const r=Math.min(145,state.quarterR*24),cx=W*.42,cy=H*.52;
+  drawSphere(ctx,cx,cy,r,state.quarter,true);drawQuarterSource(ctx,cx,cy,r,state.quarter);
+  label(ctx,`دوران: ${Math.round(state.quarter*360)}°`,82,31);label(ctx,"محور = شعاع",W-84,31,"#edf2ff","#2d4689");
+  label(ctx,state.quarter>.995?"نیم‌کره‌ی کامل":state.quarter<.02?"ربع‌دایره اولیه":"تشکیل تدریجی نیم‌کره",cx+35,H-27,state.quarter>.995?"#e8f8f2":"#fff",state.quarter>.995?"#0b7356":"#43506a")
+}
+function updateSemi(){
+  const r=state.semiR,k=4*r*r*r/3;$("semiLabel").textContent=`r = ${r} cm`;$("sphereR").textContent=r+" cm";$("sphereFormula").textContent=`V = ⁴⁄₃π × ${r}³`;$("sphereVol").textContent=`${fmtCoef(k)}π cm³`;$("sphereApprox").textContent=`≈ ${fmt(k*Math.PI)} cm³`;renderSemi()
+}
+function updateQuarter(){
+  const r=state.quarterR,k=2*r*r*r/3;$("quarterLabel").textContent=`r = ${r} cm`;$("hemiR").textContent=r+" cm";$("hemiFormula").textContent=`V = ²⁄₃π × ${r}³`;$("hemiVol").textContent=`${fmtCoef(k)}π cm³`;$("hemiApprox").textContent=`≈ ${fmt(k*Math.PI)} cm³`;renderQuarter()
+}
+
+function renderAll(){renderRect();renderTri();renderSemi();renderQuarter()}
+
+/* controls rectangle */
+$("rectL").addEventListener("change",()=>{state.rectL=+$("rectL").value;["rectPL","rectPW"].forEach(k=>{stop(k);state[k]=0});$("rectProgL").value=$("rectProgW").value=0;updateRect()});
+$("rectW").addEventListener("change",()=>{state.rectW=+$("rectW").value;["rectPL","rectPW"].forEach(k=>{stop(k);state[k]=0});$("rectProgL").value=$("rectProgW").value=0;updateRect()});
+$("rectProgL").addEventListener("input",()=>{stop("rectPL");state.rectPL=+$("rectProgL").value/1000;renderRect()});
+$("rectProgW").addEventListener("input",()=>{stop("rectPW");state.rectPW=+$("rectProgW").value/1000;renderRect()});
+$("rectPlayL").onclick=()=>animate("rectPL",$("rectProgL"),renderRect); $("rectPlayW").onclick=()=>animate("rectPW",$("rectProgW"),renderRect);
+$("rectResetL").onclick=()=>{stop("rectPL");setP("rectPL",0,$("rectProgL"),renderRect)}; $("rectResetW").onclick=()=>{stop("rectPW");setP("rectPW",0,$("rectProgW"),renderRect)};
+$("playRectAll").onclick=()=>{animate("rectPL",$("rectProgL"),renderRect);animate("rectPW",$("rectProgW"),renderRect)};
+$("resetRectAll").onclick=()=>{["rectPL","rectPW"].forEach(k=>stop(k));state.rectPL=state.rectPW=0;$("rectProgL").value=$("rectProgW").value=0;renderRect()};
+
+/* controls triangle */
+$("legA").addEventListener("change",()=>{state.a=+$("legA").value;["triA","triB","triC"].forEach(k=>{stop(k);state[k]=0});$("triProgA").value=$("triProgB").value=$("triProgC").value=0;updateTri()});
+$("legB").addEventListener("change",()=>{state.b=+$("legB").value;["triA","triB","triC"].forEach(k=>{stop(k);state[k]=0});$("triProgA").value=$("triProgB").value=$("triProgC").value=0;updateTri()});
+[["triProgA","triA"],["triProgB","triB"],["triProgC","triC"]].forEach(([inp,key])=>{$(inp).addEventListener("input",()=>{stop(key);state[key]=+$(inp).value/1000;renderTri()})});
+$("triPlayA").onclick=()=>animate("triA",$("triProgA"),renderTri); $("triPlayB").onclick=()=>animate("triB",$("triProgB"),renderTri); $("triPlayC").onclick=()=>animate("triC",$("triProgC"),renderTri);
+$("triResetA").onclick=()=>{stop("triA");setP("triA",0,$("triProgA"),renderTri)}; $("triResetB").onclick=()=>{stop("triB");setP("triB",0,$("triProgB"),renderTri)}; $("triResetC").onclick=()=>{stop("triC");setP("triC",0,$("triProgC"),renderTri)};
+$("playTriangleAll").onclick=()=>{animate("triA",$("triProgA"),renderTri);animate("triB",$("triProgB"),renderTri);animate("triC",$("triProgC"),renderTri)};
+$("resetTriangleAll").onclick=()=>{["triA","triB","triC"].forEach(k=>stop(k));state.triA=state.triB=state.triC=0;$("triProgA").value=$("triProgB").value=$("triProgC").value=0;renderTri()};
+
+/* controls semi */
+$("semiR").addEventListener("change",()=>{state.semiR=+$("semiR").value;stop("semi");state.semi=0;$("semiProg").value=0;updateSemi()});
+$("semiProg").addEventListener("input",()=>{stop("semi");state.semi=+$("semiProg").value/1000;renderSemi()});
+$("semiPlay").onclick=$("semiPlay2").onclick=()=>animate("semi",$("semiProg"),renderSemi);
+$("semiReset").onclick=$("semiReset2").onclick=()=>{stop("semi");setP("semi",0,$("semiProg"),renderSemi)};
+
+/* controls quarter */
+$("quarterR").addEventListener("change",()=>{state.quarterR=+$("quarterR").value;stop("quarter");state.quarter=0;$("quarterProg").value=0;updateQuarter()});
+$("quarterProg").addEventListener("input",()=>{stop("quarter");state.quarter=+$("quarterProg").value/1000;renderQuarter()});
+$("quarterPlay").onclick=$("quarterPlay2").onclick=()=>animate("quarter",$("quarterProg"),renderQuarter);
+$("quarterReset").onclick=$("quarterReset2").onclick=()=>{stop("quarter");setP("quarter",0,$("quarterProg"),renderQuarter)};
+
+updateRect(); updateTri(); updateSemi(); updateQuarter();
+})();
+</script>
+</body>
+</html>
